@@ -1,0 +1,41 @@
+.rules-container {
+    position: fixed;
+    bottom: 6px;
+    right: 10px; 
+    width: 35%; 
+    height: 35%; 
+    overflow: auto; 
+    border: 1px solid #ccc; 
+    background-color: #fff; 
+}
+
+table {
+    width: 100%; 
+    border-collapse: collapse;
+}
+
+td {
+    border: 1px solid #ddd; 
+    padding: 8px; 
+    text-align: center;
+}
+
+th {
+    text-align: center;
+    padding: 4px;
+    border-right: 1px solid #f4f4f4;
+    border-left: 1px solid #f4f4f4; 
+}
+
+thead {
+    position: sticky;
+    top: 0; 
+    background-color: #f4f4f4;
+    z-index: 2; 
+}
+
+.close-button { 
+    position: absolute;
+    top: 0; 
+    right: 0; 
+}

@@ -1,0 +1,7 @@
+.guide-button { 
+    position: absolute;
+    bottom: 0; 
+    right: 0; 
+    margin: 8px; 
+    padding: 5px 10px; 
+}
