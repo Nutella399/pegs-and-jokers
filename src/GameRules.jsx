@@ -2,14 +2,14 @@ import "./GameRules.css";
 
 const GameRules = ({ closeGuide }) => {
   return (
-    <div class="rules-container">
+    <div className="rules-container">
       <table>
         <thead>
           <tr>
             <th>Card Value</th>
             <th>
               Card Usage Description
-              <button class="close-button" onClick={() => closeGuide(false)}>
+              <button className="close-button" onClick={() => closeGuide(false)}>
                 Close Guide
               </button>
             </th>

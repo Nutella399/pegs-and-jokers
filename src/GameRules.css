@@ -4,7 +4,7 @@
     right: 10px; 
     width: 35%; 
     height: 47%; /* 35% could be nicer still divided*/
-    /*overflow: auto; */  
+    overflow: auto;   
     border: 1px solid #ccc; 
     background-color: #fff; 
 }

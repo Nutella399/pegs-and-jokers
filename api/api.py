@@ -14,8 +14,18 @@ def get_current_time():
     return {'time': parsed_time}
 
 @app.route('/hand/<int:user_id>', methods=['GET'])
-def getHand(user_id): 
-    if(user_id == 1): 
-        return {'hand': ['Joker', 'King', '8', '7', 'Ace']}
-    else: 
-        return {'hand': ['9', '1', '2', '3', '4']}
+def getHand(user_id):
+    if(user_id == 1):
+        return {'hand': [{'Suit': 'Diamonds', 'Rank': 'Joker'}, 
+                         {'Suit': 'Diamonds', 'Rank': 'King'}, 
+                         {'Suit': 'Diamonds', 'Rank': '7'},
+                         {'Suit': 'Diamonds', 'Rank': '8'},
+                         {'Suit': 'Diamonds', 'Rank': 'Ace'}]}
+    else:
+       return {'hand': [{'Suit': 'Diamonds', 'Rank': '9'}, 
+                         {'Suit': 'Diamonds', 'Rank': '1'}, 
+                         {'Suit': 'Diamonds', 'Rank': '2'},
+                         {'Suit': 'Diamonds', 'Rank': '3'},
+                         {'Suit': 'Diamonds', 'Rank': '4'}]}
+    
+    

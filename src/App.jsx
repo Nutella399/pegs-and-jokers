@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import Game from "./Game.jsx"
+import Game from "./Game.jsx";
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -17,7 +17,6 @@ const Home = () => {
   }, []);
 
   const startGame = () => {
-    console.log("button is click and in function")
     navigate("/game");
   };
   return (
@@ -31,7 +30,6 @@ const Home = () => {
     </div>
   );
 };
-
 
 function App() {
   return (
