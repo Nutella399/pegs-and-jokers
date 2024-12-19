@@ -1,9 +1,15 @@
 import time
-from datetime import datetime
+from deck import Deck
 
 from flask import Flask
 
 app = Flask(__name__)
+
+deck = Deck()
+
+#move this function to a call when we press start game we generate the deck 
+#probably where we get the hand for all players as well 
+deck.new_deck(2)
 
 @app.route('/time')
 def get_current_time(): 
@@ -13,19 +19,22 @@ def get_current_time():
                                              time_arr[4], time_arr[5])
     return {'time': parsed_time}
 
-@app.route('/hand/<int:user_id>', methods=['GET'])
-def getHand(user_id):
-    if(user_id == 1):
-        return {'hand': [{'Suit': 'Diamonds', 'Rank': 'Joker'}, 
-                         {'Suit': 'Diamonds', 'Rank': 'King'}, 
-                         {'Suit': 'Diamonds', 'Rank': '7'},
-                         {'Suit': 'Diamonds', 'Rank': '8'},
-                         {'Suit': 'Diamonds', 'Rank': 'Ace'}]}
-    else:
-       return {'hand': [{'Suit': 'Diamonds', 'Rank': '9'}, 
-                         {'Suit': 'Diamonds', 'Rank': '1'}, 
-                         {'Suit': 'Diamonds', 'Rank': '2'},
-                         {'Suit': 'Diamonds', 'Rank': '3'},
-                         {'Suit': 'Diamonds', 'Rank': '4'}]}
-    
-    
+#probably need to limit over here that a user can only have 5 cards 
+@app.route('/hand/<int:player_id>', methods=['GET'])
+def getHand(player_id):
+    deck.player_draw(5, player_id)
+    hand = deck.player_hands[player_id]
+    return hand
+
+#make sure the limit works for this as well probably needs to happen on the deck file
+@app.route('/deck/<int:player_id>', methods=['GET'])
+def drawCard(player_id):
+    deck.player_draw(1, player_id)
+    hand = deck.player_hands[player_id]
+    return hand
+
+@app.route('/deck/<int:player_id>/code/<string:card_code>', methods=['GET'])
+def discardCard(player_id,card_code):
+    deck.player_discard(1, card_code)
+    hand = deck.player_hands[player_id]
+    return hand

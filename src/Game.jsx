@@ -1,39 +1,58 @@
 import React, { useEffect, useState } from "react";
-import GameRules from "./GameRules";
+import GameRules from "./GameRules.tsx";
+import FaceCard from "./FaceCard.tsx";
 import "./Game.css";
-import FaceCard from "./FaceCard";
 
 const Game = () => {
+  const cardbackURL = 'https://www.deckofcardsapi.com/static/img/back.png'
+  
   const [isOpen, setIsOpen] = useState(false);
   const [hand, setHand] = useState([]);
+  const [playerId] = useState(1); 
 
+  //figure out why this is calling again every refresh 
   useEffect(() => {
-    fetch("/hand/1")
+    fetch(`/hand/${playerId}`)
       .then((res) => res.json())
       .then((data) => {
         setHand(data.hand);
       });
-  }, []);
+  }, [playerId]);
 
   const openRules = () => {
     setIsOpen(true);
   };
 
-  const handleCardClick = (rank) => {
-    console.log("card rank: " + rank);
+  const handleCardClick = (code) => {
+    console.log("card rank: " + code);
+    fetch(`/deck/${playerId}/code/${code}`)
+    .then((res) => res.json())
+    .then((data) => {
+      setHand(data.hand);
+    });
+  };
+
+  const handleDeckClick = () => {
+    fetch(`/deck/${playerId}`)
+    .then((res) => res.json())
+    .then((data) => {
+      setHand(data.hand);
+    });
   };
 
   return (
     <div>
       <header className="Game-header">
         <h1>Game Board Coming Soon TM </h1>
+        <div>
+          <img className="deck" onClick={(handleDeckClick)} src={cardbackURL}/>
+        </div>
         <div className="hand">
           {hand.map((card, index) => (
             <FaceCard
               key={index}
-              rank={card.Rank}
-              suit={card.Suit}
-              onCardClick={() => handleCardClick(card.Rank)}
+              cardFrontURL={card.image}
+              onCardClick={() => handleCardClick(card.code)}
             />
           ))}
         </div>

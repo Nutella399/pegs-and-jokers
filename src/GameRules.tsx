@@ -1,6 +1,11 @@
+import React from "react";
 import "./GameRules.css";
 
-const GameRules = ({ closeGuide }) => {
+interface Props {
+  closeGuide: Function
+}
+
+const GameRules = ({ closeGuide }: Props) => {
   return (
     <div className="rules-container">
       <table>

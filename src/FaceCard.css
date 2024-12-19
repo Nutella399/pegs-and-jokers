@@ -1,4 +1,4 @@
-.card {
+.cardButton {
     width: 100px;
     height: 150px; 
     border: 3px solid #131313; 
@@ -10,15 +10,12 @@
     align-items: center;
 }
 
-.rank {
-    font-size: 24px;
-}
-
-.suit {
-    font-size: 32px;
+.card{ 
+    width: 100px;
+    height: 150px; 
 }
 
 .betweenCards {
     padding-right: 10px; 
-   }
+}
   
