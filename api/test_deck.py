@@ -1,7 +1,10 @@
 from deck import Deck
 
-deck = Deck()
-deck.new_deck(4)
+deck = Deck(4)
+#deck.new_deck()
+
+deck2 = Deck(2)
+#deck2.new_deck()
 
 player_id_1 = 1
 player_id_2 = 2
@@ -15,23 +18,31 @@ def test_new_deck():
 
 def test_player_draw():
     deck.player_draw(5, player_id_1)
-    assert(len(Deck.player_hands[player_id_1]['hand']) == 5)
+    assert(len(deck.player_hands[player_id_1]['hand']) == 5)
     deck.player_draw(5, player_id_2)
-    assert(len(Deck.player_hands[player_id_2]['hand']) == 5)
+    assert(len(deck.player_hands[player_id_2]['hand']) == 5)
     deck.player_draw(1, player_id_1)
-    assert(len(Deck.player_hands[player_id_1]['hand']) == 6)
+    assert(len(deck.player_hands[player_id_1]['hand']) == 6)
+
+def test_player_draw_error_at_more_than_6():
+    deck.player_draw(1, player_id_2)
+    assert(len(deck.player_hands[player_id_2]['hand']) == 6)
+    error = deck.player_draw(1, player_id_1)
+    assert(error['error'] == "can't draw more then six at a time")
+    error = deck.player_draw(1, player_id_2)
+    assert(error['error'] == "can't draw more then six at a time")
 
 def test_player_discard(): 
-    assert(len(Deck.player_hands[player_id_1]['hand']) == 6)
+    assert(len(deck.player_hands[player_id_1]['hand']) == 6)
     card = deck.player_hands[player_id_1]['hand'][0]['code']
     error = deck.player_discard(player_id_1, card)
     assert(error is None)
-    assert(len(Deck.player_hands[player_id_1]['hand']) == 5)
+    assert(len(deck.player_hands[player_id_1]['hand']) == 5)
 
 def test_player_discard_not_in_hand(): 
     card = deck.player_hands[player_id_2]['hand'][0]['code']
     error = deck.player_discard(player_id_1, card)
-    assert(error['error'] == 'this player does not have this card')
+    assert(error['error'] == "this player does not have this card")
 
 def test_player_discard_not_in_hand(): 
     card = deck.player_hands[player_id_2]['hand'][0]['code']

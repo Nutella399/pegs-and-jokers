@@ -11,30 +11,30 @@ SUITS = {'S': 'SPADES', 'D': 'DIAMONDS', 'H': 'HEARTS', 'C': 'CLUBS', '1': 'BLAC
 VALUES = {'A': 'ACE', 'J': 'JACK', 'Q': 'QUEEN', 'K': 'KING', '0': '10', 'X': 'JOKER'}
 
 class Deck(): 
-    deck_count = 1
-    stack = []
-    player_hands = {}
-    discard = []
-    
-
-    def new_deck(self, deck_count): 
-        if(len(self.stack) == 0):
-            cards = CARDS + JOKERS
-            for i in range(0,deck_count):
-                newCards = []
-                for card in cards:
-                    newCards.append(card + str(i + 1))
-                self.stack = self.stack + newCards[:]
+    def __init__(self, deck_count): 
+        self.deck_count = deck_count
+        self.stack = []
+        self.player_hands = {}
+        self.discard = []
+        cards = CARDS + JOKERS
+        for i in range(0,self.deck_count):
+            newCards = []
+            for card in cards:
+                newCards.append(card + str(i + 1))
+            self.stack = self.stack + newCards[:]
         random.shuffle(self.stack)
     
-    def player_draw(self, draw_count, player_id): 
-        response = self.draw(draw_count)
-        draw_hand = response['draw_hand']
-        print("remaining cards: ", response['remaining'])
-        if player_id in self.player_hands: 
-           self.player_hands[player_id]['hand'] = self.player_hands[player_id]['hand'] + draw_hand
-        else: 
-           self.player_hands[player_id] = {'hand': draw_hand}
+    def player_draw(self, draw_count, player_id):  
+            response = self.draw(draw_count)
+            draw_hand = response['draw_hand']
+            print("remaining cards: ", response['remaining'])
+            if player_id in self.player_hands: 
+                if len(self.player_hands[player_id]['hand']) != 6: 
+                    self.player_hands[player_id]['hand'] = self.player_hands[player_id]['hand'] + draw_hand
+                else:
+                    return {'error': "can't draw more then six at a time"}
+            else: 
+                self.player_hands[player_id] = {'hand': draw_hand}
 
     def player_discard(self, player_id, card_code): 
         if player_id in self.player_hands: 
