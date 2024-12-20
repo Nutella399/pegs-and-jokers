@@ -1,0 +1,19 @@
+.cardButton {
+  width: 99px;
+  height: 145px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.card {
+  width: 100px;
+  height: 150px;
+  border-radius: 5px;
+}
+
+.betweenCards {
+  padding-right: 10px;
+}

@@ -1,10 +1,8 @@
 from deck import Deck
 
 deck = Deck(4)
-#deck.new_deck()
 
 deck2 = Deck(2)
-#deck2.new_deck()
 
 player_id_1 = 1
 player_id_2 = 2
@@ -19,24 +17,45 @@ def test_new_deck():
 def test_player_draw():
     deck.player_draw(5, player_id_1)
     assert(len(deck.player_hands[player_id_1]['hand']) == 5)
+
     deck.player_draw(5, player_id_2)
     assert(len(deck.player_hands[player_id_2]['hand']) == 5)
+
     deck.player_draw(1, player_id_1)
     assert(len(deck.player_hands[player_id_1]['hand']) == 6)
 
 def test_player_draw_error_at_more_than_6():
+    prev_remaining = len(deck.stack)
     deck.player_draw(1, player_id_2)
+    curr_remaining = len(deck.stack)
+    assert(prev_remaining != curr_remaining)
     assert(len(deck.player_hands[player_id_2]['hand']) == 6)
+    
+    prev_remaining = len(deck.stack)
     error = deck.player_draw(1, player_id_1)
+    curr_remaining = len(deck.stack)
+    assert(prev_remaining == curr_remaining)
     assert(error['error'] == "can't draw more then six at a time")
+    assert(len(deck.player_hands[player_id_1]['hand']) == 6)
+
     error = deck.player_draw(1, player_id_2)
     assert(error['error'] == "can't draw more then six at a time")
+    assert(len(deck.player_hands[player_id_2]['hand']) == 6)
 
 def test_player_discard(): 
     assert(len(deck.player_hands[player_id_1]['hand']) == 6)
+
     card = deck.player_hands[player_id_1]['hand'][0]['code']
     error = deck.player_discard(player_id_1, card)
     assert(error is None)
+    assert(len(deck.player_hands[player_id_1]['hand']) == 5)
+
+def test_player_discard_prevent_another_discard(): 
+    assert(len(deck.player_hands[player_id_1]['hand']) == 5)
+
+    card = deck.player_hands[player_id_1]['hand'][0]['code']
+    error = deck.player_discard(player_id_1, card)
+    assert(error['error']=="can only discard one card during a turn")
     assert(len(deck.player_hands[player_id_1]['hand']) == 5)
 
 def test_player_discard_not_in_hand(): 
@@ -49,7 +68,6 @@ def test_player_discard_not_in_hand():
     error = deck.player_discard(3, card)
     assert(error['error'] == 'this player does not have a hand')
     
-
 def test_draw_cards_at_empty(): 
     deck.stack = []
     deck.discard = ['AS1']

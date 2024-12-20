@@ -7,10 +7,6 @@ app = Flask(__name__)
 
 deck = Deck(2)
 
-#move this function to a call when we press start game we generate the deck 
-#probably where we get the hand for all players as well 
-deck.new_deck()
-
 @app.route('/time')
 def get_current_time(): 
     time_arr = time.localtime()
@@ -19,14 +15,30 @@ def get_current_time():
                                              time_arr[4], time_arr[5])
     return {'time': parsed_time}
 
-#probably need to limit over here that a user can only have 5 cards 
 @app.route('/hand/<int:player_id>', methods=['GET'])
 def getHand(player_id):
-    deck.player_draw(6, player_id)
-    hand = deck.player_hands[player_id]
-    return hand
+    #when I move to different states this probably doesn't need to be here
+    #deck.player_draw(6, player_id)
+    if(deck.player_hands[player_id]):
+        hand = deck.player_hands[player_id]
+        return hand
+    else:
+        return []
 
-#make sure the limit works for this as well probably needs to happen on the deck file
+@app.route('/discard', methods=['GET'])
+def peekTopDiscardCard():
+    response = deck.peekToDicardCard()
+    print(response)
+    top_card = response[0]['image']
+    return {'card' : top_card}
+
+@app.route('/deck', methods=['GET'])
+def peekDeckNextCard():
+    response = deck.peekTopCard()
+    print(response)
+    next_card = response['image']
+    return {'card' : next_card}
+
 @app.route('/deck/<int:player_id>', methods=['GET'])
 def drawCard(player_id):
     error = deck.player_draw(1, player_id)
@@ -37,6 +49,8 @@ def drawCard(player_id):
 
 @app.route('/deck/<int:player_id>/code/<string:card_code>', methods=['GET'])
 def discardCard(player_id,card_code):
-    deck.player_discard(1, card_code)
+    error = deck.player_discard(1, card_code)
+    if(error): 
+        print(error)
     hand = deck.player_hands[player_id]
     return hand

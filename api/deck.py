@@ -25,29 +25,35 @@ class Deck():
         random.shuffle(self.stack)
     
     def player_draw(self, draw_count, player_id):  
-            response = self.draw(draw_count)
-            draw_hand = response['draw_hand']
-            print("remaining cards: ", response['remaining'])
             if player_id in self.player_hands: 
-                if len(self.player_hands[player_id]['hand']) != 6: 
+                if len(self.player_hands[player_id]['hand']) < 6: 
+                    response = self.draw(draw_count)
+                    draw_hand = response['draw_hand']
+                    print("remaining cards: ", response['remaining'])
                     self.player_hands[player_id]['hand'] = self.player_hands[player_id]['hand'] + draw_hand
                 else:
                     return {'error': "can't draw more then six at a time"}
             else: 
+                response = self.draw(draw_count)
+                draw_hand = response['draw_hand']
+                print("remaining cards: ", response['remaining'])
                 self.player_hands[player_id] = {'hand': draw_hand}
 
     def player_discard(self, player_id, card_code): 
         if player_id in self.player_hands: 
             cards = self.player_hands[player_id]['hand']
-            for i in range(len(cards)):
-                if cards[i]['code'] == card_code:
-                    self.discard.append(cards[i])
-                    print("discard pile: ", len(self.discard))
-                    del cards[i]
-                    return  
-            return {'error': 'this player does not have this card'}   
+            if len(cards) >= 6:     
+                for i in range(len(cards)):
+                    if cards[i]['code'] == card_code:
+                        self.discard.append(cards[i])
+                        print("discard pile: ", len(self.discard))
+                        del cards[i]
+                        return  
+                return {'error': "this player does not have this card"}   
+            else: 
+                return {'error': "can only discard one card during a turn"}
         else: 
-            return {'error': 'this player does not have a hand'}
+            return {'error': "this player does not have a hand"}
     
     def draw(self, draw_count): 
         if draw_count > len(self.stack):
@@ -66,6 +72,19 @@ class Deck():
         for card in cards: 
             hand.append(card_to_dict(card))
         return {'draw_hand': hand, 'remaining': len(self.stack)}
+
+
+    #create test for these
+    def peekTopCard(self): 
+        return card_to_dict(self.stack[0])
+    
+
+    #create tests for these
+    def peekToDicardCard(self):
+        end = len(self.discard) -1 
+        discard = self.discard[end:]
+        print("discard from deck.py: ", discard) 
+        return self.discard[end:]
          
 def card_to_dict(card): 
     value = card[:1]
